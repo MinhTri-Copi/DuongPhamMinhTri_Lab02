@@ -20,8 +20,9 @@
             filter: invert(1);
         }
         body {
-            background-color: #f8f9fa;
+            background-color:rgb(226, 226, 226);
         }
+  
     </style>
 </head>
 <body>

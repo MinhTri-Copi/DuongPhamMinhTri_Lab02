@@ -1,6 +1,12 @@
 <!-- filepath: /c:/laragon/www/ThucHanhMaNguonMo/ma_nguon_mo_project_lab2/app/views/product/list.php -->
 <?php include 'app/views/shares/header.php'; ?>
-
+<style>
+    .custom-card {
+        border-radius: 15px; /* Thêm border-radius */
+        overflow: hidden;
+     /* Đảm bảo nội dung không tràn ra ngoài */
+    }
+</style>
 <div class="container my-5">
     <h1 class="text-center mb-4">Danh sách sản phẩm</h1>
 
