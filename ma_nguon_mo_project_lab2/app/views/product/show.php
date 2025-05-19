@@ -9,12 +9,12 @@
 <div class="row">
 <div class="col-md-6">
 <?php if ($product->image): ?>
-<img src="/ma_nguon_mo_project_lab2/<?php echo
+<img src="/ThucHanhMaNguonMo/ma_nguon_mo_project_lab2/<?php echo
 htmlspecialchars($product->image, ENT_QUOTES, 'UTF-8'); ?>"
 class="img-fluid rounded" alt="<?php echo
 htmlspecialchars($product->name, ENT_QUOTES, 'UTF-8'); ?>">
 <?php else: ?>
-<img src="/ma_nguon_mo_project_lab2/images/no-image.png"
+<img src="/ThucHanhMaNguonMo/ma_nguon_mo_project_lab2/images/no-image.png"
 class="img-fluid rounded" alt="Không có ảnh">
 <?php endif; ?>
 </div>
@@ -39,10 +39,10 @@ htmlspecialchars($product->category_name, ENT_QUOTES, 'UTF-8') : 'Chưa có danh
 </span>
 </p>
 <div class="mt-4">
-<a href="/ma_nguon_mo_project_lab2/Product/addToCart/<?php echo
+<a href="/ThucHanhMaNguonMo/ma_nguon_mo_project_lab2/Product/addToCart/<?php echo
 $product->id; ?>"
 class="btn btn-success px-4">➕ Thêm vào giỏ hàng</a>
-<a href="/ma_nguon_mo_project_lab2/Product/list" class="btn btnsecondary px-4 ml-2">Quay lại danh sách</a>
+<a href="/ThucHanhMaNguonMo/ma_nguon_mo_project_lab2/Product/list" class="btn btnsecondary px-4 ml-2">Quay lại danh sách</a>
 </div>
 </div>
 </div>

@@ -13,7 +13,7 @@
     </div>
     <?php endif; ?>
 
-    <form method="POST" action="/ma_nguon_mo_project_lab2/Product/save" enctype="multipart/form-data" onsubmit="return validateForm();" class="needs-validation" novalidate>
+    <form method="POST" action="/ThucHanhMaNguonMo/ma_nguon_mo_project_lab2/Product/save" enctype="multipart/form-data" onsubmit="return validateForm();" class="needs-validation" novalidate>
         <div class="form-group">
             <label for="name">Tên sản phẩm:</label>
             <input type="text" id="name" name="name" class="form-control" required>
@@ -45,7 +45,7 @@
         <button type="submit" class="btn btn-primary btn-block">Thêm sản phẩm</button>
     </form>
 
-    <a href="/ma_nguon_mo_project_lab2/Product/list" class="btn btn-secondary mt-3">Quay lại danh sách sản phẩm</a>
+    <a href="/ThucHanhMaNguonMo/ma_nguon_mo_project_lab2/Product/list" class="btn btn-secondary mt-3">Quay lại danh sách sản phẩm</a>
 </div>
 
 <?php include 'app/views/shares/footer.php'; ?>

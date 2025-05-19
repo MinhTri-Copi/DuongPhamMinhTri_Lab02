@@ -60,7 +60,7 @@
 
     <div class="form-container">
         <h1>Chỉnh sửa danh mục</h1>
-        <form action="/ma_nguon_mo_project_lab2/Category/update" method="POST">
+        <form action="/ThucHanhMaNguonMo/ma_nguon_mo_project_lab2/Category/update" method="POST">
             <input type="hidden" name="id" value="<?= $category->id ?>">
             <label for="name">Tên danh mục:</label>
             <input type="text" id="name" name="name" value="<?= $category->name ?>" required>

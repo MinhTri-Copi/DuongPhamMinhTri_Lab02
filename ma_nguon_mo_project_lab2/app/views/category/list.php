@@ -24,7 +24,7 @@
 
     <div class="table-container">
         <h1 class="mb-4">Danh sách danh mục</h1>
-        <a href="/ma_nguon_mo_project_lab2/Category/add" class="btn btn-primary btn-add">Thêm danh mục</a>
+        <a href="/ThucHanhMaNguonMo/ma_nguon_mo_project_lab2/Category/add" class="btn btn-primary btn-add">Thêm danh mục</a>
         
         <?php if (empty($categories)): ?>
             <div class="alert alert-info">Không có danh mục nào được tìm thấy.</div>
@@ -45,10 +45,10 @@
                             <td><?= htmlspecialchars($category->name) ?></td>
                             <td><?= htmlspecialchars($category->description) ?></td>
                             <td class="action-links">
-                                <a href="/ma_nguon_mo_project_lab2/Category/edit/<?= $category->id ?>" class="btn btn-sm btn-warning">Sửa</a>
-                                <a href="/ma_nguon_mo_project_lab2/Category/show/<?= $category->id ?>" class="btn btn-sm btn-info">Xem</a>
+                                <a href="/ThucHanhMaNguonMo/ma_nguon_mo_project_lab2/Category/edit/<?= $category->id ?>" class="btn btn-sm btn-warning">Sửa</a>
+                                <a href="/ThucHanhMaNguonMo/ma_nguon_mo_project_lab2/Category/show/<?= $category->id ?>" class="btn btn-sm btn-info">Xem</a>
 
-                                <a href="/ma_nguon_mo_project_lab2/Category/delete/<?= $category->id ?>" 
+                                <a href="/ThucHanhMaNguonMo/ma_nguon_mo_project_lab2/Category/delete/<?= $category->id ?>" 
                                    class="btn btn-sm btn-danger" 
                                    onclick="return confirm('Bạn có chắc chắn muốn xóa danh mục này?')">Xóa</a>
                             </td>

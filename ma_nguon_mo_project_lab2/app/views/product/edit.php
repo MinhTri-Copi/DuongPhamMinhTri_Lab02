@@ -9,7 +9,7 @@
 </ul>
 </div>
 <?php endif; ?>
-<form method="POST" action="/ma_nguon_mo_project_lab2/Product/update" enctype="multipart/form-data"
+<form method="POST" action="/ThucHanhMaNguonMo/ma_nguon_mo_project_lab2/Product/update" enctype="multipart/form-data"
 onsubmit="return validateForm();">
 <input type="hidden" name="id" value="<?php echo $product->id; ?>">
 <div class="form-group">
@@ -52,6 +52,6 @@ required>
 </div>
 <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
 </form>
-<a href="/ma_nguon_mo_project_lab2/Product/list" class="btn btn-secondary mt-2">Quay lại danh sách 
+<a href="/ThucHanhMaNguonMo/ma_nguon_mo_project_lab2/Product/list" class="btn btn-secondary mt-2">Quay lại danh sách 
 sản phẩm</a>
 <?php include 'app/views/shares/footer.php'; ?>

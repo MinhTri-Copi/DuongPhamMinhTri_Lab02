@@ -1,4 +1,4 @@
-<!-- filepath: /c:/laragon/www/ma_nguon_mo_project_lab2/app/views/shares/header.php -->
+<!-- filepath: /c:/laragon/www/ThucHanhMaNguonMo/ma_nguon_mo_project_lab2/app/views/shares/header.php -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,13 +33,13 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link" href="/ma_nguon_mo_project_lab2/Product/">Danh sách sản phẩm</a>
+                <a class="nav-link" href="/ThucHanhMaNguonMo/ma_nguon_mo_project_lab2/Product/">Danh sách sản phẩm</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/ma_nguon_mo_project_lab2/Product/add">Thêm sản phẩm</a>
+                <a class="nav-link" href="/ThucHanhMaNguonMo/ma_nguon_mo_project_lab2/Product/add">Thêm sản phẩm</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/ma_nguon_mo_project_lab2/Category/">Danh mục</a>
+                <a class="nav-link" href="/ThucHanhMaNguonMo/ma_nguon_mo_project_lab2/Category/">Danh mục</a>
             </li>
         </ul>
     </div>
