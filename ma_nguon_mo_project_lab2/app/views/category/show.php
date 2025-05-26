@@ -61,7 +61,7 @@
         <p><strong>ID:</strong> <?= $category->id ?></p>
         <p><strong>Tên danh mục:</strong> <?= $category->name ?></p>
         <p><strong>Mô tả:</strong> <?= $category->description ?></p>
-        <a href="/ThucHanhMaNguonMo/ma_nguon_mo_project_lab2/Category">Quay lại danh sách</a>
+        <a href="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Category">Quay lại danh sách</a>
     </div>
     <?php include 'app/views/shares/footer.php'; ?>
 </body>

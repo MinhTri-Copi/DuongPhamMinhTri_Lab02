@@ -61,7 +61,7 @@
 
     <div class="form-container">
         <h1>Thêm danh mục</h1>
-        <form action="/ThucHanhMaNguonMo/ma_nguon_mo_project_lab2/Category/save" method="POST">
+        <form action="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Category/save" method="POST">
             <label for="name">Tên danh mục:</label>
             <input type="text" id="name" name="name" required>
             <label for="description">Mô tả:</label>
