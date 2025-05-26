@@ -176,5 +176,47 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+// Sticky navbar script
+window.addEventListener('scroll', function() {
+    const navbar = document.getElementById('main-navbar');
+    const banner = document.getElementById('promotion-banner');
+    const scrollPosition = window.scrollY;
+    
+    if (scrollPosition > 150) {
+        navbar.classList.add('navbar-fixed-top');
+        document.body.classList.add('fixed-navbar');
+        banner.classList.add('hidden-banner');
+    } else {
+        navbar.classList.remove('navbar-fixed-top');
+        document.body.classList.remove('fixed-navbar');
+        banner.classList.remove('hidden-banner');
+    }
+});
+
+// Add smooth scroll effect for better user experience
+$(document).ready(function(){
+    // Add smooth scrolling to all links
+    $("a").on('click', function(event) {
+        // Make sure this.hash has a value before overriding default behavior
+        if (this.hash !== "") {
+            // Prevent default anchor click behavior
+            event.preventDefault();
+            
+            // Store hash
+            var hash = this.hash;
+            
+            // Using jQuery's animate() method to add smooth page scroll
+            $('html, body').animate({
+                scrollTop: $(hash).offset().top - 100
+            }, 800, function(){
+                // Add hash (#) to URL when done scrolling (default click behavior)
+                window.location.hash = hash;
+            });
+        }
+    });
+});
+</script>
 </body>
 </html>

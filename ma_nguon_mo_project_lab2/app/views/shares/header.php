@@ -21,6 +21,33 @@
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             padding: 15px 0;
+            transition: all 0.3s ease;
+        }
+        
+        /* Styles for sticky header */
+        .navbar-fixed-top {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            z-index: 1030;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.2);
+            animation: slideDown 0.35s ease-out;
+            padding: 10px 0;
+        }
+        
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
+        
+        /* Add padding to body when navbar is fixed */
+        body.fixed-navbar {
+            padding-top: 80px;
         }
         
         .navbar-brand {
@@ -90,6 +117,7 @@
             text-align: center;
             padding: 8px 0;
             font-weight: 500;
+            transition: all 0.3s ease;
         }
         
         body {
@@ -97,42 +125,20 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
-        .main-categories {
-            background-color: white;
-            border-radius: 5px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-            padding: 10px;
-        }
-        
-        .category-item {
-            text-align: center;
-            padding: 10px;
-            transition: transform 0.3s ease;
-        }
-        
-        .category-item:hover {
-            transform: translateY(-5px);
-        }
-        
-        .category-icon {
-            font-size: 2rem;
-            color: var(--primary-color);
-            margin-bottom: 8px;
-        }
-        
-        .category-name {
-            font-size: 0.9rem;
-            color: var(--dark-color);
+        /* Hide banner when scrolling */
+        .hidden-banner {
+            height: 0;
+            padding: 0;
+            overflow: hidden;
         }
     </style>
 </head>
 <body>
-<div class="promotion-banner">
+<div id="promotion-banner" class="promotion-banner">
     🔥 Khuyến mãi hot - Giảm đến 50% cho các dòng điện thoại mới nhất! 🔥
 </div>
 
-<nav class="navbar navbar-expand-lg">
+<nav id="main-navbar" class="navbar navbar-expand-lg">
     <div class="container">
         <a class="navbar-brand" href="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product/">
             <i class="fas fa-mobile-alt"></i> PhoneStore
@@ -186,36 +192,25 @@
 </nav>
 
 <div class="container mt-4">
-    <?php if(isset($_SERVER['REQUEST_URI']) && strpos($_SERVER['REQUEST_URI'], 'Product/cart') === false && strpos($_SERVER['REQUEST_URI'], 'Product/checkout') === false): ?>
-    <div class="main-categories mb-4">
-        <div class="row">
-            <div class="col-4 col-md-2 category-item">
-                <div class="category-icon"><i class="fas fa-mobile-alt"></i></div>
-                <div class="category-name">Điện thoại</div>
-            </div>
-            <div class="col-4 col-md-2 category-item">
-                <div class="category-icon"><i class="fas fa-tablet-alt"></i></div>
-                <div class="category-name">Máy tính bảng</div>
-            </div>
-            <div class="col-4 col-md-2 category-item">
-                <div class="category-icon"><i class="fas fa-laptop"></i></div>
-                <div class="category-name">Laptop</div>
-            </div>
-            <div class="col-4 col-md-2 category-item">
-                <div class="category-icon"><i class="fas fa-headphones"></i></div>
-                <div class="category-name">Âm thanh</div>
-            </div>
-            <div class="col-4 col-md-2 category-item">
-                <div class="category-icon"><i class="fas fa-clock"></i></div>
-                <div class="category-name">Đồng hồ</div>
-            </div>
-            <div class="col-4 col-md-2 category-item">
-                <div class="category-icon"><i class="fas fa-sim-card"></i></div>
-                <div class="category-name">Phụ kiện</div>
-            </div>
-        </div>
-    </div>
-    <?php endif; ?>
 </div>
+
+<script>
+// Sticky navbar script
+window.addEventListener('scroll', function() {
+    const navbar = document.getElementById('main-navbar');
+    const banner = document.getElementById('promotion-banner');
+    const scrollPosition = window.scrollY;
+    
+    if (scrollPosition > 150) {
+        navbar.classList.add('navbar-fixed-top');
+        document.body.classList.add('fixed-navbar');
+        banner.classList.add('hidden-banner');
+    } else {
+        navbar.classList.remove('navbar-fixed-top');
+        document.body.classList.remove('fixed-navbar');
+        banner.classList.remove('hidden-banner');
+    }
+});
+</script>
 </body>
 </html>

@@ -106,9 +106,9 @@
                         <a href="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product/addToCart/<?php echo $product->id; ?>" class="btn btn-primary btn-lg mr-2">
                             <i class="fas fa-cart-plus mr-2"></i> Thêm vào giỏ hàng
                         </a>
-                        <a href="#" class="btn btn-danger btn-lg">
+                        <button id="buy-now-btn" class="btn btn-danger btn-lg">
                             <i class="fas fa-bolt mr-2"></i> Mua ngay
-                        </a>
+                        </button>
                     </div>
                     
                     <div class="service-info mt-4">
@@ -291,6 +291,15 @@ document.addEventListener('DOMContentLoaded', function() {
         if (this.value === '' || parseInt(this.value) < 1) {
             this.value = 1;
         }
+    });
+    
+    // Buy Now button functionality
+    const buyNowBtn = document.getElementById('buy-now-btn');
+    buyNowBtn.addEventListener('click', function() {
+        const quantity = parseInt(qtyInput.value);
+        
+        // Redirect to the buyNow controller method with quantity as query parameter
+        window.location.href = "/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product/buyNow/<?php echo $product->id; ?>?quantity=" + quantity;
     });
     
     // Thumbnail clicks (dummy functionality)

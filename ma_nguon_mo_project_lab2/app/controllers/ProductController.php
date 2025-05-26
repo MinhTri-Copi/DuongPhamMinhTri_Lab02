@@ -160,23 +160,42 @@ if (!isset($_SESSION['cart'])) {
     $name = $_POST['name'];
     $phone = $_POST['phone'];
     $address = $_POST['address'];
+    $email = $_POST['email'] ?? '';
+    $note = $_POST['note'] ?? '';
+    $payment_method = $_POST['payment_method'] ?? 'cod';
+    
     // Kiểm tra giỏ hàng
     if (!isset($_SESSION['cart']) || empty($_SESSION['cart'])) {
     echo "Giỏ hàng trống.";
     return;
     }
+    
+    // Calculate total for order
+    $total = 0;
+    $cart = $_SESSION['cart'];
+    foreach ($cart as $item) {
+        $total += $item['price'] * $item['quantity'];
+    }
+    // Add VAT (10%)
+    $total += $total * 0.1;
+    
     // Bắt đầu giao dịch
     $this->db->beginTransaction();
     try {
     // Lưu thông tin đơn hàng vào bảng orders
-    $query = "INSERT INTO orders (name, phone, address) VALUES (:name,
-:phone, :address)";
+    $query = "INSERT INTO orders (name, phone, address, email, note, payment_method, total) VALUES (:name,
+:phone, :address, :email, :note, :payment_method, :total)";
 $stmt = $this->db->prepare($query);
 $stmt->bindParam(':name', $name);
 $stmt->bindParam(':phone', $phone);
 $stmt->bindParam(':address', $address);
+$stmt->bindParam(':email', $email);
+$stmt->bindParam(':note', $note);
+$stmt->bindParam(':payment_method', $payment_method);
+$stmt->bindParam(':total', $total);
 $stmt->execute();
 $order_id = $this->db->lastInsertId();
+
 // Lưu chi tiết đơn hàng vào bảng order_details
 $cart = $_SESSION['cart'];
 foreach ($cart as $product_id => $item) {
@@ -189,8 +208,31 @@ $stmt->bindParam(':quantity', $item['quantity']);
 $stmt->bindParam(':price', $item['price']);
 $stmt->execute();
 }
-// Xóa giỏ hàng sau khi đặt hàng thành công
+
+// Store order info in session for the confirmation page
+$_SESSION['last_order'] = [
+    'order_id' => $order_id,
+    'name' => $name,
+    'phone' => $phone,
+    'address' => $address,
+    'email' => $email,
+    'note' => $note,
+    'payment_method' => $payment_method,
+    'total' => $total,
+    'items' => $cart,
+    'order_date' => date('Y-m-d H:i:s'),
+    'is_buy_now' => isset($_SESSION['is_buy_now']) ? true : false
+];
+
+// Xóa giỏ hàng và flag mua ngay sau khi đặt hàng thành công
 unset($_SESSION['cart']);
+if (isset($_SESSION['is_buy_now'])) {
+    unset($_SESSION['is_buy_now']);
+}
+if (isset($_SESSION['buy_now_product'])) {
+    unset($_SESSION['buy_now_product']);
+}
+
 // Commit giao dịch
 $this->db->commit();
 // Chuyển hướng đến trang xác nhận đơn hàng
@@ -263,6 +305,43 @@ public function searchAndFilter() {
 
     // Hiển thị danh sách sản phẩm
     include 'app/views/product/list.php';
+}
+
+public function buyNow($id)
+{
+    $product = $this->productModel->getProductById($id);
+    if (!$product) {
+        echo "Không tìm thấy sản phẩm.";
+        return;
+    }
+    
+    // Lấy số lượng từ query parameter (được gửi từ trang sản phẩm)
+    $quantity = isset($_GET['quantity']) ? (int)$_GET['quantity'] : 1;
+    
+    // Đảm bảo số lượng hợp lệ
+    if ($quantity < 1) {
+        $quantity = 1;
+    }
+    
+    // Xóa giỏ hàng hiện tại để chỉ mua sản phẩm này
+    $_SESSION['cart'] = [];
+    
+    // Đánh dấu là đang mua ngay (sử dụng cho checkout)
+    $_SESSION['is_buy_now'] = true;
+    
+    // Thêm sản phẩm vào giỏ hàng
+    $_SESSION['cart'][$id] = [
+        'name' => $product->name,
+        'price' => $product->price,
+        'quantity' => $quantity,
+        'image' => $product->image
+    ];
+    
+    // Lưu lại ID của sản phẩm "Mua ngay" để sử dụng sau này nếu cần
+    $_SESSION['buy_now_product'] = $id;
+    
+    // Chuyển hướng đến trang thanh toán
+    header('Location: /DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product/checkout');
 }
 }
 
