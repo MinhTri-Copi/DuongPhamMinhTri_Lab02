@@ -2,6 +2,14 @@
 
 <div class="checkout-page">
     <div class="container py-4">
+        <?php if (isset($_SESSION['is_buy_now']) && $_SESSION['is_buy_now']): ?>
+        <div class="alert alert-info alert-dismissible fade show buy-now-alert" role="alert">
+            <i class="fas fa-info-circle mr-2"></i> Bạn đang mua ngay sản phẩm này. Hãy điền thông tin giao hàng để hoàn tất đơn hàng.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <?php endif; ?>
         <div class="row">
             <div class="col-lg-8">
                 <!-- Invoice-like Order Summary -->
@@ -192,6 +200,11 @@
         background-color: #f8f9fa;
         min-height: 80vh;
         padding-bottom: 50px;
+    }
+    
+    .buy-now-alert {
+        border-left: 4px solid #2962ff;
+        background-color: rgba(41, 98, 255, 0.1);
     }
     
     /* Invoice card styling */

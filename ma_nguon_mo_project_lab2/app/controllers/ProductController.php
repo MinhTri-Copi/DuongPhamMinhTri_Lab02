@@ -3,6 +3,8 @@
 require_once('app/config/database.php');
 require_once('app/models/ProductModel.php');
 require_once('app/models/CategoryModel.php');
+require_once 'app/helpers/SessionHelper.php';
+
 class ProductController
 {
 private $productModel;
@@ -12,6 +14,9 @@ public function __construct()
 $this->db = (new Database())->getConnection();
 $this->productModel = new ProductModel($this->db);
 }
+private function isAdmin() {
+    return SessionHelper::isAdmin();
+    }
 public function index()
 {
 $products = $this->productModel->getProducts();
@@ -28,12 +33,20 @@ echo "Không thấy sản phẩm.";
 }
 public function add()
 {
-$categories = (new CategoryModel($this->db))->getCategories();
-include_once 'app/views/product/add.php';
+    if (!$this->isAdmin()) {
+        header('Location: /DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product');
+        exit;
+    }
+    $categories = (new CategoryModel($this->db))->getCategories();
+    include_once 'app/views/product/add.php';
 }
 public function save()
 {
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (!$this->isAdmin()) {
+        header('Location: /DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product');
+        exit;
+    }
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 $name = $_POST['name'] ?? '';
 $description = $_POST['description'] ?? '';
 $price = $_POST['price'] ?? '';
@@ -56,9 +69,13 @@ include 'app/views/product/add.php';
 }
 public function edit($id)
 {
-$product = $this->productModel->getProductById($id);
-$categories = (new CategoryModel($this->db))->getCategories();
-if ($product) {
+    if (!$this->isAdmin()) {
+        header('Location: /DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product');
+        exit;
+    }
+    $product = $this->productModel->getProductById($id);
+    $categories = (new CategoryModel($this->db))->getCategories();
+    if ($product) {
 include 'app/views/product/edit.php';
 } else {
 echo "Không thấy sản phẩm.";
@@ -66,7 +83,11 @@ echo "Không thấy sản phẩm.";
 }
 public function update()
 {
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!$this->isAdmin()) {
+        header('Location: /DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product');
+        exit;
+    }
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $id = $_POST['id'];
 $name = $_POST['name'];
 $description = $_POST['description'];
@@ -88,7 +109,11 @@ echo "Đã xảy ra lỗi khi lưu sản phẩm.";
 }
 public function delete($id)
 {
-if ($this->productModel->deleteProduct($id)) {
+    if (!$this->isAdmin()) {
+        header('Location: /DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product');
+        exit;
+    }
+    if ($this->productModel->deleteProduct($id)) {
 header('Location: /DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product');
 } else {    
     echo "Đã xảy ra lỗi khi xóa sản phẩm.";

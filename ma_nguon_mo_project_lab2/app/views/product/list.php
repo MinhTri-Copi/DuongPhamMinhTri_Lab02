@@ -8,9 +8,11 @@
                 <p class="featured-subtitle">Khám phá các sản phẩm chính hãng với giá tốt nhất</p>
             </div>
             <div class="col-lg-5 col-md-5 text-right">
+                <?php if (SessionHelper::isAdmin()): ?>
                 <a href="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product/add" class="btn btn-success rounded-pill btn-add-product">
                     <i class="fas fa-plus-circle mr-1"></i> Thêm sản phẩm mới
                 </a>
+                <?php endif; ?>
             </div>
         </div>
     </div>
@@ -143,7 +145,15 @@
             </div>
             
             <div class="card-footer bg-white border-top-0 p-2">
-                <div class="d-flex">
+                <div class="d-flex gap-2 flex-wrap">
+                    <?php if (SessionHelper::isAdmin()): ?>
+                    <a href="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product/edit/<?php echo $product->id; ?>" class="btn btn-warning btn-sm w-100 mb-1" onclick="event.stopPropagation()">
+                        <i class="fas fa-edit"></i> Sửa
+                    </a>
+                    <a href="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product/delete/<?php echo $product->id; ?>" class="btn btn-danger btn-sm w-100 mb-1" onclick="event.stopPropagation(); return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?');">
+                        <i class="fas fa-trash"></i> Xóa
+                    </a>
+                    <?php endif; ?>
                     <a href="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product/addToCart/<?php echo $product->id; ?>" class="btn btn-sm btn-primary w-100 add-to-cart-btn" onclick="event.stopPropagation()">
                         <i class="fas fa-cart-plus"></i> Thêm vào giỏ
                     </a>

@@ -1,4 +1,7 @@
 <!-- filepath: /c:/laragon/www/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/app/views/shares/header.php -->
+<?php
+require_once 'app/helpers/SessionHelper.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -131,6 +134,24 @@
             padding: 0;
             overflow: hidden;
         }
+        
+        .navbar-nav.ml-auto .nav-item .nav-link {
+            padding: 8px 15px;
+            text-align: center;
+            background-color: #0d47a1;
+            border-radius: 0;
+            margin: 0 1px;
+            min-width: 50px;
+        }
+        
+        .navbar-nav.ml-auto .nav-item .nav-link:hover {
+            background-color: #002171;
+        }
+        
+        .navbar-nav.ml-auto .nav-item .nav-link i {
+            display: inline-block;
+            font-size: 1.2rem;
+        }
     </style>
 </head>
 <body>
@@ -160,27 +181,54 @@
                         <i class="fas fa-home"></i> Trang chủ
                     </a>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-list"></i> Danh mục
+                <li class="nav-item">
+                    <a class="nav-link" href="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product/">
+                        <i class="fas fa-list"></i> Danh sách sản phẩm
                     </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                </li>
+                <?php if (SessionHelper::isAdmin()): ?>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-cog"></i> Quản trị
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="adminDropdown">
                         <a class="dropdown-item" href="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Category/">Xem danh mục</a>
                         <a class="dropdown-item" href="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Category/add">Thêm danh mục</a>
-                    </div>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="productsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-mobile"></i> Sản phẩm
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="productsDropdown">
-                        <a class="dropdown-item" href="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product/">Danh sách sản phẩm</a>
                         <a class="dropdown-item" href="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product/add">Thêm sản phẩm</a>
                     </div>
                 </li>
+                <?php endif; ?>
                 <li class="nav-item">
-                    <a class="nav-link cart-icon" href="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product/cart">
-                        <i class="fas fa-shopping-cart"></i> Giỏ hàng
+                    <?php
+                    if (SessionHelper::isLoggedIn()) {
+                        echo "<a class='nav-link'><i class='fas fa-user'></i> " . 
+                            htmlspecialchars($_SESSION['username']) . 
+                            " (" . SessionHelper::getRole() . ")</a>";
+                    } else {
+                        echo "<a class='nav-link' href='/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Account/login'>";
+                        echo "<i class='fas fa-sign-in-alt'></i> Đăng nhập</a>";
+                    }
+                    ?>
+                </li>
+                <?php if (SessionHelper::isLoggedIn()): ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Account/logout">
+                        <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                    </a>
+                </li>
+                <?php else: ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Account/register">
+                        <i class="fas fa-user-plus"></i> Đăng ký
+                    </a>
+                </li>
+                <?php endif; ?>
+            </ul>
+            
+            <ul class="navbar-nav ml-auto d-flex flex-row">
+                <li class="nav-item">
+                    <a class="nav-link cart-icon text-center" href="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product/cart">
+                        <i class="fas fa-shopping-cart"></i>
                         <?php if(isset($_SESSION['cart']) && count($_SESSION['cart']) > 0): ?>
                         <span class="cart-badge"><?php echo count($_SESSION['cart']); ?></span>
                         <?php endif; ?>

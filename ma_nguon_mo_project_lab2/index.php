@@ -1,13 +1,14 @@
 <?php
 session_start();
 require_once 'app/models/ProductModel.php';
+require_once 'app/helpers/SessionHelper.php';
 // Product/add
 $url = $_GET['url'] ?? '';
 $url = rtrim($url, '/');
 $url = filter_var($url, FILTER_SANITIZE_URL);
 $url = explode('/', $url);
 // Kiểm tra phần đầu tiên của URL để xác định controller
-$controllerName = isset($url[0]) && $url[0] != '' ? ucfirst($url[0]) . 'Controller' :
+$controllerName = isset($url[0]) && $url[0] != '' ? ucfirst($url[0]) . 'Controller' : 
 'DefaultController';
 // Kiểm tra phần thứ hai của URL để xác định action
 $action = isset($url[1]) && $url[1] != '' ? $url[1] : 'index';

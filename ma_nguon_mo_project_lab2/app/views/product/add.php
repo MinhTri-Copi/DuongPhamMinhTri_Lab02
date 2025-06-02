@@ -45,7 +45,7 @@
         <button type="submit" class="btn btn-primary btn-block">Thêm sản phẩm</button>
     </form>
 
-    <a href="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product/" class="btn btn-secondary mt-3">Quay lại danh sách sản phẩm</a>
+    <a href="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product/index" class="btn btn-secondary mt-3">Quay lại danh sách sản phẩm</a>
 </div>
 
 <?php include 'app/views/shares/footer.php'; ?>

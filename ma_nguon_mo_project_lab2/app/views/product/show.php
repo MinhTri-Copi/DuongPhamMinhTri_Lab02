@@ -129,6 +129,7 @@
                 
                 <div class="card-footer bg-white border-top-0 p-0 pb-3 px-3">
                     <div class="admin-actions d-flex justify-content-end">
+                        <?php if (SessionHelper::isAdmin()): ?>
                         <a href="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product/edit/<?php echo $product->id; ?>" class="btn btn-warning btn-sm mr-2">
                             <i class="fas fa-edit"></i> Sửa
                         </a>
@@ -136,6 +137,7 @@
                            onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?');">
                             <i class="fas fa-trash"></i> Xóa
                         </a>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
