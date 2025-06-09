@@ -368,6 +368,27 @@ public function buyNow($id)
     // Chuyển hướng đến trang thanh toán
     header('Location: /DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product/checkout');
 }
+
+// Phương thức để lấy sản phẩm dạng JSON bao gồm category_name
+public function getProductsJson()
+{
+    header('Content-Type: application/json');
+    $products = $this->productModel->getProducts();
+    echo json_encode($products);
+}
+
+// Phương thức để lấy chi tiết sản phẩm dạng JSON bao gồm category_name
+public function getProductJson($id)
+{
+    header('Content-Type: application/json');
+    $product = $this->productModel->getProductById($id);
+    if ($product) {
+        echo json_encode($product);
+    } else {
+        http_response_code(404);
+        echo json_encode(['message' => 'Product not found']);
+    }
+}
 }
 
 ?>

@@ -5,150 +5,19 @@
         <ol class="breadcrumb bg-white shadow-sm">
             <li class="breadcrumb-item"><a href="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product/"><i class="fas fa-home"></i> Trang chủ</a></li>
             <li class="breadcrumb-item"><a href="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product/">Sản phẩm</a></li>
-            <li class="breadcrumb-item active" aria-current="page"><?php echo htmlspecialchars($product->name, ENT_QUOTES, 'UTF-8'); ?></li>
+            <li class="breadcrumb-item active" aria-current="page" id="product-name-breadcrumb">Đang tải...</li>
         </ol>
     </nav>
 
-    <?php if ($product): ?>
-    <div class="row">
-        <div class="col-lg-5 mb-4">
-            <div class="product-gallery card border-0 shadow-sm">
-                <div class="card-body p-0">
-                    <?php if ($product->image): ?>
-                    <div class="main-image-container">
-                        <img id="main-product-image" src="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/<?php echo htmlspecialchars($product->image, ENT_QUOTES, 'UTF-8'); ?>" 
-                            class="img-fluid" alt="<?php echo htmlspecialchars($product->name, ENT_QUOTES, 'UTF-8'); ?>">
-                    </div>
-                    <?php else: ?>
-                    <div class="main-image-container">
-                        <img src="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/public/images/no-image.png" 
-                            class="img-fluid" alt="Không có ảnh">
-                    </div>
-                    <?php endif; ?>
-                </div>
-                
-                <!-- Dummy thumbnails for visual effect -->
-                <div class="thumbnails mt-3 d-flex justify-content-center flex-wrap">
-                    <?php if ($product->image): ?>
-                    <div class="thumbnail active">
-                        <img src="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/<?php echo htmlspecialchars($product->image, ENT_QUOTES, 'UTF-8'); ?>"
-                            class="img-thumbnail" alt="Thumbnail 1">
-                    </div>
-                    <?php endif; ?>
-                    <!-- Add some placeholder thumbnails for visual effect -->
-                    <div class="thumbnail">
-                        <div class="placeholder-thumb"></div>
-                    </div>
-                    <div class="thumbnail">
-                        <div class="placeholder-thumb"></div>
-                    </div>
-                    <div class="thumbnail">
-                        <div class="placeholder-thumb"></div>
-                    </div>
-                </div>
+    <div id="product-container">
+        <!-- Product details will be loaded here -->
+        <div class="text-center">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Đang tải...</span>
             </div>
-        </div>
-        
-        <div class="col-lg-7">
-            <div class="product-info card border-0 shadow-sm h-100">
-                <div class="card-body">
-                    <div class="product-badges mb-3">
-                        <span class="badge badge-danger">Giảm 10%</span>
-                        <span class="badge badge-success">Mới</span>
-                        <span class="badge badge-primary"><?php echo !empty($product->category_name) ? 
-                            htmlspecialchars($product->category_name, ENT_QUOTES, 'UTF-8') : 'Chưa có danh mục'; ?></span>
-                    </div>
-                    
-                    <h1 class="product-title mb-2"><?php echo htmlspecialchars($product->name, ENT_QUOTES, 'UTF-8'); ?></h1>
-                    
-                    <div class="product-meta d-flex align-items-center mb-3">
-                        <div class="ratings mr-3">
-                            <i class="fas fa-star text-warning"></i>
-                            <i class="fas fa-star text-warning"></i>
-                            <i class="fas fa-star text-warning"></i>
-                            <i class="fas fa-star text-warning"></i>
-                            <i class="fas fa-star-half-alt text-warning"></i>
-                            <span class="rating-count">(142)</span>
-                        </div>
-                        <span class="text-muted">|</span>
-                        <span class="sold-count ml-3"><i class="fas fa-shopping-cart text-secondary mr-1"></i> Đã bán 48 sản phẩm</span>
-                    </div>
-                    
-                    <div class="price-container bg-light p-3 rounded mb-4">
-                        <div class="current-price mb-2"><?php echo number_format($product->price, 0, ',', '.'); ?> ₫</div>
-                        <div class="original-price text-muted"><del><?php echo number_format($product->price * 1.1, 0, ',', '.'); ?> ₫</del> -10%</div>
-                    </div>
-                    
-                    <div class="product-description mb-4">
-                        <h5 class="description-title">Thông tin sản phẩm</h5>
-                        <div class="description-content">
-                            <?php echo nl2br(htmlspecialchars($product->description, ENT_QUOTES, 'UTF-8')); ?>
-                        </div>
-                    </div>
-                    
-                    <div class="quantity-section mb-4">
-                        <h5 class="mb-3">Số lượng</h5>
-                        <div class="d-flex align-items-center">
-                            <div class="input-group quantity-control" style="width: 130px;">
-                                <div class="input-group-prepend">
-                                    <button class="btn btn-outline-secondary" type="button" id="decrease-qty">-</button>
-                                </div>
-                                <input type="text" class="form-control text-center" id="product-quantity" value="1">
-                                <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary" type="button" id="increase-qty">+</button>
-                                </div>
-                            </div>
-                            <span class="ml-3 text-muted">Còn <strong class="text-success">99</strong> sản phẩm</span>
-                        </div>
-                    </div>
-                    
-                    <div class="action-buttons">
-                        <a href="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product/addToCart/<?php echo $product->id; ?>" class="btn btn-primary btn-lg mr-2">
-                            <i class="fas fa-cart-plus mr-2"></i> Thêm vào giỏ hàng
-                        </a>
-                        <button id="buy-now-btn" class="btn btn-danger btn-lg">
-                            <i class="fas fa-bolt mr-2"></i> Mua ngay
-                        </button>
-                    </div>
-                    
-                    <div class="service-info mt-4">
-                        <div class="service-item d-flex align-items-center mb-2">
-                            <i class="fas fa-shipping-fast text-primary mr-2"></i>
-                            <span>Giao hàng miễn phí toàn quốc cho đơn hàng từ 500.000₫</span>
-                        </div>
-                        <div class="service-item d-flex align-items-center mb-2">
-                            <i class="fas fa-shield-alt text-primary mr-2"></i>
-                            <span>Bảo hành chính hãng 12 tháng</span>
-                        </div>
-                        <div class="service-item d-flex align-items-center">
-                            <i class="fas fa-exchange-alt text-primary mr-2"></i>
-                            <span>Đổi trả trong 7 ngày nếu sản phẩm lỗi</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="card-footer bg-white border-top-0 p-0 pb-3 px-3">
-                    <div class="admin-actions d-flex justify-content-end">
-                        <?php if (SessionHelper::isAdmin()): ?>
-                        <a href="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product/edit/<?php echo $product->id; ?>" class="btn btn-warning btn-sm mr-2">
-                            <i class="fas fa-edit"></i> Sửa
-                        </a>
-                        <a href="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product/delete/<?php echo $product->id; ?>" class="btn btn-danger btn-sm" 
-                           onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?');">
-                            <i class="fas fa-trash"></i> Xóa
-                        </a>
-                        <?php endif; ?>
-                    </div>
-                </div>
-            </div>
+            <p>Đang tải thông tin sản phẩm...</p>
         </div>
     </div>
-    <?php else: ?>
-    <div class="alert alert-danger text-center">
-        <h4>Không tìm thấy sản phẩm!</h4>
-        <a href="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product/" class="btn btn-primary mt-2">Quay về trang sản phẩm</a>
-    </div>
-    <?php endif; ?>
 </div>
 
 <style>
@@ -269,51 +138,236 @@
 </style>
 
 <script>
+// Định nghĩa biến isAdmin từ PHP
+const isAdmin = <?php echo SessionHelper::isAdmin() ? 'true' : 'false'; ?>;
+
 document.addEventListener('DOMContentLoaded', function() {
-    // Quantity control
-    const qtyInput = document.getElementById('product-quantity');
-    const decreaseBtn = document.getElementById('decrease-qty');
-    const increaseBtn = document.getElementById('increase-qty');
+    const productId = window.location.pathname.split('/').pop();
     
-    decreaseBtn.addEventListener('click', function() {
-        const currentValue = parseInt(qtyInput.value);
-        if (currentValue > 1) {
-            qtyInput.value = currentValue - 1;
-        }
-    });
-    
-    increaseBtn.addEventListener('click', function() {
-        const currentValue = parseInt(qtyInput.value);
-        qtyInput.value = currentValue + 1;
-    });
-    
-    // Prevent non-numeric input
-    qtyInput.addEventListener('input', function() {
-        this.value = this.value.replace(/[^0-9]/g, '');
-        if (this.value === '' || parseInt(this.value) < 1) {
-            this.value = 1;
-        }
-    });
-    
-    // Buy Now button functionality
-    const buyNowBtn = document.getElementById('buy-now-btn');
-    buyNowBtn.addEventListener('click', function() {
-        const quantity = parseInt(qtyInput.value);
-        
-        // Redirect to the buyNow controller method with quantity as query parameter
-        window.location.href = "/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product/buyNow/<?php echo $product->id; ?>?quantity=" + quantity;
-    });
-    
-    // Thumbnail clicks (dummy functionality)
-    document.querySelectorAll('.thumbnail').forEach(thumb => {
-        thumb.addEventListener('click', function() {
-            // Only do something if it has a real image
-            if (this.querySelector('img')) {
-                document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
+    // Fetch product details from API
+    fetch(`/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product/getProductJson/${productId}`)
+        .then(response => {
+            console.log('API Response status:', response.status);
+            if (!response.ok) {
+                throw new Error('Product not found');
             }
+            return response.json();
+        })
+        .then(product => {
+            console.log('Product received:', product);
+            // Update breadcrumb
+            document.getElementById('product-name-breadcrumb').textContent = product.name;
+            
+            // Format product details HTML
+            const productHTML = `
+                <div class="row">
+                    <div class="col-lg-5 mb-4">
+                        <div class="product-gallery card border-0 shadow-sm">
+                            <div class="card-body p-0">
+                                ${product.image ? `
+                                <div class="main-image-container">
+                                    <img id="main-product-image" src="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/${product.image}" 
+                                        class="img-fluid" alt="${product.name}">
+                                </div>
+                                ` : `
+                                <div class="main-image-container">
+                                    <img src="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/public/images/no-image.png" 
+                                        class="img-fluid" alt="Không có ảnh">
+                                </div>
+                                `}
+                            </div>
+                            
+                            <!-- Dummy thumbnails for visual effect -->
+                            <div class="thumbnails mt-3 d-flex justify-content-center flex-wrap">
+                                ${product.image ? `
+                                <div class="thumbnail active">
+                                    <img src="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/${product.image}"
+                                        class="img-thumbnail" alt="Thumbnail 1">
+                                </div>
+                                ` : ''}
+                                <!-- Add some placeholder thumbnails for visual effect -->
+                                <div class="thumbnail">
+                                    <div class="placeholder-thumb"></div>
+                                </div>
+                                <div class="thumbnail">
+                                    <div class="placeholder-thumb"></div>
+                                </div>
+                                <div class="thumbnail">
+                                    <div class="placeholder-thumb"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-7">
+                        <div class="product-info card border-0 shadow-sm h-100">
+                            <div class="card-body">
+                                <div class="product-badges mb-3">
+                                    <span class="badge badge-danger">Giảm 10%</span>
+                                    <span class="badge badge-success">Mới</span>
+                                    <span class="badge badge-primary">${product.category_name || 'Chưa phân loại'}</span>
+                                </div>
+                                
+                                <h1 class="product-title mb-2">${product.name}</h1>
+                                
+                                <div class="product-meta d-flex align-items-center mb-3">
+                                    <div class="ratings mr-3">
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star-half-alt text-warning"></i>
+                                        <span class="rating-count">(142)</span>
+                                    </div>
+                                    <span class="text-muted">|</span>
+                                    <span class="sold-count ml-3"><i class="fas fa-shopping-cart text-secondary mr-1"></i> Đã bán 48 sản phẩm</span>
+                                </div>
+                                
+                                <div class="price-container bg-light p-3 rounded mb-4">
+                                    <div class="current-price mb-2">${Number(product.price).toLocaleString('vi-VN')} ₫</div>
+                                    <div class="original-price text-muted"><del>${Number(product.price * 1.1).toLocaleString('vi-VN')} ₫</del> -10%</div>
+                                </div>
+                                
+                                <div class="category-info mb-3">
+                                    <p class="mb-0">
+                                        <strong>Danh mục:</strong> ${product.category_name || 'Chưa phân loại'}
+                                    </p>
+                                </div>
+                                
+                                <div class="product-description mb-4">
+                                    <h5 class="description-title">Thông tin sản phẩm</h5>
+                                    <div class="description-content">
+                                        ${product.description}
+                                    </div>
+                                </div>
+                                
+                                <div class="quantity-section mb-4">
+                                    <h5 class="mb-3">Số lượng</h5>
+                                    <div class="d-flex align-items-center">
+                                        <div class="input-group quantity-control" style="width: 130px;">
+                                            <div class="input-group-prepend">
+                                                <button class="btn btn-outline-secondary" type="button" id="decrease-qty">-</button>
+                                            </div>
+                                            <input type="text" class="form-control text-center" id="product-quantity" value="1">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-outline-secondary" type="button" id="increase-qty">+</button>
+                                            </div>
+                                        </div>
+                                        <span class="ml-3 text-muted">Còn <strong class="text-success">99</strong> sản phẩm</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="action-buttons">
+                                    <a href="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product/addToCart/${product.id}" class="btn btn-primary btn-lg mr-2">
+                                        <i class="fas fa-cart-plus mr-2"></i> Thêm vào giỏ hàng
+                                    </a>
+                                    <button id="buy-now-btn" class="btn btn-danger btn-lg">
+                                        <i class="fas fa-bolt mr-2"></i> Mua ngay
+                                    </button>
+                                </div>
+                                
+                                <div class="service-info mt-4">
+                                    <div class="service-item d-flex align-items-center mb-2">
+                                        <i class="fas fa-shipping-fast text-primary mr-2"></i>
+                                        <span>Giao hàng miễn phí toàn quốc cho đơn hàng từ 500.000₫</span>
+                                    </div>
+                                    <div class="service-item d-flex align-items-center mb-2">
+                                        <i class="fas fa-shield-alt text-primary mr-2"></i>
+                                        <span>Bảo hành chính hãng 12 tháng</span>
+                                    </div>
+                                    <div class="service-item d-flex align-items-center">
+                                        <i class="fas fa-exchange-alt text-primary mr-2"></i>
+                                        <span>Đổi trả trong 7 ngày nếu sản phẩm lỗi</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="card-footer bg-white border-top-0 p-0 pb-3 px-3">
+                                <div class="admin-actions d-flex justify-content-end">
+                                    ${isAdmin ? `
+                                    <a href="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product/edit/${product.id}" class="btn btn-warning btn-sm mr-2">
+                                        <i class="fas fa-edit"></i> Sửa
+                                    </a>
+                                    <button class="btn btn-danger btn-sm" onclick="deleteProduct(${product.id})">
+                                        <i class="fas fa-trash"></i> Xóa
+                                    </button>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Insert product details into container
+            document.getElementById('product-container').innerHTML = productHTML;
+            
+            // Setup quantity control
+            const qtyInput = document.getElementById('product-quantity');
+            const decreaseBtn = document.getElementById('decrease-qty');
+            const increaseBtn = document.getElementById('increase-qty');
+            
+            if (decreaseBtn && increaseBtn && qtyInput) {
+                decreaseBtn.addEventListener('click', function() {
+                    const currentValue = parseInt(qtyInput.value);
+                    if (currentValue > 1) {
+                        qtyInput.value = currentValue - 1;
+                    }
+                });
+                
+                increaseBtn.addEventListener('click', function() {
+                    const currentValue = parseInt(qtyInput.value);
+                    qtyInput.value = currentValue + 1;
+                });
+                
+                // Prevent non-numeric input
+                qtyInput.addEventListener('input', function() {
+                    this.value = this.value.replace(/[^0-9]/g, '');
+                    if (this.value === '' || parseInt(this.value) < 1) {
+                        this.value = 1;
+                    }
+                });
+            }
+            
+            // Setup Buy Now button
+            const buyNowBtn = document.getElementById('buy-now-btn');
+            if (buyNowBtn) {
+                buyNowBtn.addEventListener('click', function() {
+                    const quantity = parseInt(qtyInput.value);
+                    window.location.href = `/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product/buyNow/${product.id}?quantity=${quantity}`;
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('product-container').innerHTML = `
+                <div class="alert alert-danger text-center">
+                    <h4>Không tìm thấy sản phẩm!</h4>
+                    <a href="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product/" class="btn btn-primary mt-2">Quay về trang sản phẩm</a>
+                </div>
+            `;
         });
-    });
+    
+    // Function to delete product
+    window.deleteProduct = function(productId) {
+        if (confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')) {
+            fetch(`/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/ProductApi/destroy/${productId}`, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === 'Product deleted successfully') {
+                    window.location.href = '/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product';
+                } else {
+                    alert('Xóa sản phẩm thất bại');
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting product:', error);
+                alert('Đã xảy ra lỗi khi xóa sản phẩm');
+            });
+        }
+    };
 });
 </script>
 

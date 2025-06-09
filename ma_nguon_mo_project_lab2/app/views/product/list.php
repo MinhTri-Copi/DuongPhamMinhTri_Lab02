@@ -106,62 +106,8 @@
     </div>
 </div>
 
-<div class="row">
-    <?php foreach ($products as $product): ?>
-    <div class="col-lg-3 col-md-3 col-sm-6 mb-3">
-        <div class="card product-card h-100 shadow-sm" onclick="goToProductDetails(<?php echo $product->id; ?>)">
-            <div class="product-badge">
-                <span class="badge badge-danger">-10%</span>
-            </div>
-            
-            <?php if ($product->image): ?>
-            <div class="product-image-container">
-                <img src="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/<?php echo $product->image; ?>" class="card-img-top product-image" alt="<?php echo htmlspecialchars($product->name, ENT_QUOTES, 'UTF-8'); ?>">
-            </div>
-            <?php endif; ?>
-            
-            <div class="card-body p-2">
-                <h5 class="card-title product-name mb-1">
-                    <?php echo htmlspecialchars($product->name, ENT_QUOTES, 'UTF-8'); ?>
-                </h5>
-                
-                <div class="product-rating">
-                    <i class="fas fa-star text-warning"></i>
-                    <i class="fas fa-star text-warning"></i>
-                    <i class="fas fa-star text-warning"></i>
-                    <i class="fas fa-star text-warning"></i>
-                    <i class="fas fa-star-half-alt text-warning"></i>
-                    <small class="text-muted">(4.5)</small>
-                </div>
-                
-                <div class="product-price mt-2">
-                    <span class="current-price"><?php echo number_format($product->price, 0, ',', '.'); ?>₫</span>
-                    <span class="original-price"><?php echo number_format($product->price * 1.1, 0, ',', '.'); ?>₫</span>
-                </div>
-                
-                <div class="mt-2">
-                    <small class="text-success stock-status">Còn hàng</small>
-                </div>
-            </div>
-            
-            <div class="card-footer bg-white border-top-0 p-2">
-                <div class="d-flex gap-2 flex-wrap">
-                    <?php if (SessionHelper::isAdmin()): ?>
-                    <a href="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product/edit/<?php echo $product->id; ?>" class="btn btn-warning btn-sm w-100 mb-1" onclick="event.stopPropagation()">
-                        <i class="fas fa-edit"></i> Sửa
-                    </a>
-                    <a href="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product/delete/<?php echo $product->id; ?>" class="btn btn-danger btn-sm w-100 mb-1" onclick="event.stopPropagation(); return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?');">
-                        <i class="fas fa-trash"></i> Xóa
-                    </a>
-                    <?php endif; ?>
-                    <a href="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product/addToCart/<?php echo $product->id; ?>" class="btn btn-sm btn-primary w-100 add-to-cart-btn" onclick="event.stopPropagation()">
-                        <i class="fas fa-cart-plus"></i> Thêm vào giỏ
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <?php endforeach; ?>
+<div class="row" id="product-container">
+    <!-- Products will be loaded dynamically -->
 </div>
 
 <style>
@@ -465,33 +411,122 @@
 
 <!-- JavaScript for animations -->
 <script>
+// Định nghĩa biến isAdmin từ PHP
+const isAdmin = <?php echo SessionHelper::isAdmin() ? 'true' : 'false'; ?>;
+
 // JavaScript function to handle card clicks
 function goToProductDetails(productId) {
     window.location.href = '/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product/show/' + productId;
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Make product cards look clickable
-    const productCards = document.querySelectorAll('.product-card');
-    productCards.forEach((card) => {
-        card.style.cursor = 'pointer';
-    });
-    
-    // Set animation delay for each product card
-    productCards.forEach((card, index) => {
-        card.style.setProperty('--product-index', index);
-    });
-    
-    // Add pulse animation to "Add to Cart" buttons
-    const addToCartButtons = document.querySelectorAll('.card-footer .btn');
-    addToCartButtons.forEach(button => {
-        button.addEventListener('mouseover', function() {
-            this.classList.add('pulse-animation');
+    // Fetch products from API with category name
+    fetch('/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product/getProductsJson')
+        .then(response => {
+            console.log('API Response status:', response.status);
+            return response.json();
+        })
+        .then(products => {
+            console.log('Products received from API:', products);
+            
+            // Kiểm tra từng sản phẩm và danh mục
+            if (products && products.length > 0) {
+                products.forEach(product => {
+                    console.log(`Product ID: ${product.id}, Name: ${product.name}, Category ID: ${product.category_id}, Category Name: ${product.category_name || 'Không có'}`);
+                });
+            }
+            
+            const productContainer = document.getElementById('product-container');
+            productContainer.innerHTML = ''; // Clear the container
+            
+            if (!products || products.length === 0) {
+                productContainer.innerHTML = '<div class="col-12 text-center"><p>Không có sản phẩm nào</p></div>';
+                return;
+            }
+            
+            products.forEach(product => {
+                const productHTML = `
+                    <div class="col-lg-3 col-md-3 col-sm-6 mb-3">
+                        <div class="card product-card h-100 shadow-sm" onclick="goToProductDetails(${product.id})">
+                            <div class="product-badge">
+                                <span class="badge badge-danger">-10%</span>
+                            </div>
+                            
+                            <div class="card-body p-2">
+                                <h5 class="card-title product-name mb-1">
+                                    ${product.name}
+                                </h5>
+                                
+                                <div class="product-rating">
+                                    <i class="fas fa-star text-warning"></i>
+                                    <i class="fas fa-star text-warning"></i>
+                                    <i class="fas fa-star text-warning"></i>
+                                    <i class="fas fa-star text-warning"></i>
+                                    <i class="fas fa-star-half-alt text-warning"></i>
+                                    <small class="text-muted">(4.5)</small>
+                                </div>
+                                
+                                <div class="product-price mt-2">
+                                    <span class="current-price">${Number(product.price).toLocaleString('vi-VN')}₫</span>
+                                    <span class="original-price">${Number(product.price * 1.1).toLocaleString('vi-VN')}₫</span>
+                                </div>
+                                
+                                <div class="mt-2">
+                                    <small class="text-success stock-status">Còn hàng</small>
+                                </div>
+                                
+                                <div class="mt-2">
+                                    <small class="text-muted">Danh mục: ${product.category_name || 'Chưa phân loại'}</small>
+                                </div>
+                            </div>
+                            
+                            <div class="card-footer bg-white border-top-0 p-2">
+                                <div class="d-flex gap-2 flex-wrap">
+                                    ${isAdmin ? `
+                                    <a href="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product/edit/${product.id}" class="btn btn-warning btn-sm w-100 mb-1" onclick="event.stopPropagation()">
+                                        <i class="fas fa-edit"></i> Sửa
+                                    </a>
+                                    <button class="btn btn-danger btn-sm w-100 mb-1" onclick="event.stopPropagation(); deleteProduct(${product.id})">
+                                        <i class="fas fa-trash"></i> Xóa
+                                    </button>
+                                    ` : ''}
+                                    <a href="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product/addToCart/${product.id}" class="btn btn-sm btn-primary w-100 add-to-cart-btn" onclick="event.stopPropagation()">
+                                        <i class="fas fa-cart-plus"></i> Thêm vào giỏ
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                productContainer.innerHTML += productHTML;
+            });
+            
+            // Make product cards look clickable
+            const productCards = document.querySelectorAll('.product-card');
+            productCards.forEach((card) => {
+                card.style.cursor = 'pointer';
+            });
+            
+            // Set animation delay for each product card
+            productCards.forEach((card, index) => {
+                card.style.setProperty('--product-index', index);
+            });
+            
+            // Add pulse animation to "Add to Cart" buttons
+            const addToCartButtons = document.querySelectorAll('.card-footer .btn');
+            addToCartButtons.forEach(button => {
+                button.addEventListener('mouseover', function() {
+                    this.classList.add('pulse-animation');
+                });
+                button.addEventListener('animationend', function() {
+                    this.classList.remove('pulse-animation');
+                });
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching products:', error);
+            document.getElementById('product-container').innerHTML = '<div class="col-12"><div class="alert alert-danger">Lỗi khi tải sản phẩm. Vui lòng thử lại sau.</div></div>';
         });
-        button.addEventListener('animationend', function() {
-            this.classList.remove('pulse-animation');
-        });
-    });
     
     // Add subtle animation to featured section elements
     const featuredTitle = document.querySelector('.featured-title');
@@ -513,6 +548,28 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// Function to delete a product
+function deleteProduct(id) {
+    if (confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')) {
+        fetch(`/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/ProductApi/destroy/${id}`, {
+            method: 'DELETE'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message === 'Product deleted successfully') {
+                // Reload the page to reflect the changes
+                location.reload();
+            } else {
+                alert('Xóa sản phẩm thất bại');
+            }
+        })
+        .catch(error => {
+            console.error('Error deleting product:', error);
+            alert('Đã xảy ra lỗi khi xóa sản phẩm');
+        });
+    }
+}
 
 // Add CSS for additional animations
 const styleSheet = document.createElement('style');

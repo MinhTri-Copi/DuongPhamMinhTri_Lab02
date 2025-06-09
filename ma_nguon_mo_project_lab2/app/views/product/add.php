@@ -3,17 +3,11 @@
 <div class="container mt-5">
     <h1 class="text-center mb-4">Thêm sản phẩm mới</h1>
 
-    <?php if (!empty($errors)): ?>
-    <div class="alert alert-danger">
-        <ul>
-            <?php foreach ($errors as $error): ?>
-            <li><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></li>
-            <?php endforeach; ?>
-        </ul>
+    <div id="error-container" class="alert alert-danger" style="display: none;">
+        <ul id="error-list"></ul>
     </div>
-    <?php endif; ?>
 
-    <form method="POST" action="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product/save" enctype="multipart/form-data" onsubmit="return validateForm();" class="needs-validation" novalidate>
+    <form id="add-product-form" class="needs-validation" novalidate>
         <div class="form-group">
             <label for="name">Tên sản phẩm:</label>
             <input type="text" id="name" name="name" class="form-control" required>
@@ -37,10 +31,6 @@
                 <?php endforeach; ?>
             </select>
             <div class="invalid-feedback">Vui lòng chọn danh mục.</div>
-        </div>
-        <div class="form-group">
-            <label for="image">Hình ảnh:</label>
-            <input type="file" id="image" name="image" class="form-control-file">
         </div>
         <button type="submit" class="btn btn-primary btn-block">Thêm sản phẩm</button>
     </form>
@@ -76,20 +66,56 @@
 </style>
 
 <script>
-    // JavaScript để xử lý validation của Bootstrap
-    (function() {
-        'use strict';
-        window.addEventListener('load', function() {
-            var forms = document.getElementsByClassName('needs-validation');
-            var validation = Array.prototype.filter.call(forms, function(form) {
-                form.addEventListener('submit', function(event) {
-                    if (form.checkValidity() === false) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    }
-                    form.classList.add('was-validated');
-                }, false);
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('add-product-form');
+        const errorContainer = document.getElementById('error-container');
+        const errorList = document.getElementById('error-list');
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            if (form.checkValidity() === false) {
+                event.stopPropagation();
+                form.classList.add('was-validated');
+                return;
+            }
+            
+            // Get form data
+            const formData = {
+                name: document.getElementById('name').value,
+                description: document.getElementById('description').value,
+                price: document.getElementById('price').value,
+                category_id: document.getElementById('category_id').value
+            };
+            
+            // Send API request
+            fetch('/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/ProductApi/store', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.errors) {
+                    // Show validation errors
+                    errorList.innerHTML = '';
+                    Object.values(data.errors).forEach(error => {
+                        const li = document.createElement('li');
+                        li.textContent = error;
+                        errorList.appendChild(li);
+                    });
+                    errorContainer.style.display = 'block';
+                } else if (data.message === 'Product created successfully') {
+                    // Redirect to product list
+                    window.location.href = '/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Đã xảy ra lỗi khi thêm sản phẩm. Vui lòng thử lại sau.');
             });
-        }, false);
-    })();
+        });
+    });
 </script>
