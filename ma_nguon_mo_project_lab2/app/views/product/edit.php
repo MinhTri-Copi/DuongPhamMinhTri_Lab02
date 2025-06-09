@@ -34,6 +34,26 @@
             </select>
             <div class="invalid-feedback">Vui lòng chọn danh mục.</div>
         </div>
+
+        <!-- Hiển thị hình ảnh hiện tại nếu có -->
+        <div class="form-group">
+            <label>Hình ảnh hiện tại:</label>
+            <div class="current-image-container">
+                <?php if (!empty($product->image)): ?>
+                <div class="card">
+                    <img src="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/<?php echo $product->image; ?>" class="img-thumbnail" style="max-height: 200px; width: auto;">
+                    <div class="card-body">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="remove_image">
+                            <label class="custom-control-label" for="remove_image">Xóa hình ảnh</label>
+                        </div>
+                    </div>
+                </div>
+                <?php else: ?>
+                <p class="text-muted">Không có hình ảnh</p>
+                <?php endif; ?>
+            </div>
+        </div>
         <button type="submit" class="btn btn-primary btn-block">Lưu thay đổi</button>
     </form>
     
@@ -92,6 +112,13 @@
                 price: document.getElementById('price').value,
                 category_id: parseInt(document.getElementById('category_id').value, 10) // Ensure category_id is a number
             };
+            
+            // Kiểm tra xem có cần xóa hình ảnh không
+            const removeImageCheckbox = document.getElementById('remove_image');
+            if (removeImageCheckbox && removeImageCheckbox.checked) {
+                formData.image = null; // Đặt hình ảnh thành null nếu checkbox xóa hình ảnh được chọn
+                console.log('User chose to remove image - setting image to null');
+            }
             
             // Hiển thị dữ liệu gửi đi trong debug
             debugInfo.innerHTML = `

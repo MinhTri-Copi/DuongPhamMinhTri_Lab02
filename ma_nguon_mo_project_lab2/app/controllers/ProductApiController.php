@@ -95,20 +95,24 @@ $data = json_decode(file_get_contents("php://input"), true);
 error_log("Received data for update: " . print_r($data, true));
 
 // Sử dụng giá trị hiện tại nếu không có giá trị mới
-$name = isset($data['name']) && !empty($data['name']) ? $data['name'] : $currentProduct['name'];
-$description = isset($data['description']) && !empty($data['description']) ? $data['description'] : $currentProduct['description'];
-$price = isset($data['price']) && !empty($data['price']) ? $data['price'] : $currentProduct['price'];
+$name = isset($data['name']) && !empty($data['name']) ? $data['name'] : $currentProduct->name;
+$description = isset($data['description']) && !empty($data['description']) ? $data['description'] : $currentProduct->description;
+$price = isset($data['price']) && !empty($data['price']) ? $data['price'] : $currentProduct->price;
+
+// Xử lý image - cho phép null value
+$image = isset($data['image']) ? $data['image'] : $currentProduct->image;
+// Nếu client gửi null một cách rõ ràng (không phải undefined hay missing)
+if (array_key_exists('image', $data) && $data['image'] === null) {
+    $image = null;
+    error_log("Client explicitly set image to null");
+}
 
 // Xử lý category - chỉ sử dụng category_id
 $category_id = null;
-if (isset($data['category_id']) && !empty($data['category_id'])) {
-    $category_id = (int)$data['category_id'];
-}
-
-// Nếu không có category_id mới, giữ nguyên giá trị cũ
-if ($category_id === null && isset($currentProduct['category_id'])) {
-    $category_id = (int)$currentProduct['category_id'];
-    error_log("Using existing category ID: $category_id");
+if (isset($data['category_id'])) {
+    $category_id = $data['category_id'];
+} else {
+    $category_id = $currentProduct->category_id;
 }
 
 // Debug
@@ -117,6 +121,8 @@ error_log("Name: $name");
 error_log("Description: $description");
 error_log("Price: $price");
 error_log("Category ID: $category_id");
+error_log("Image: " . ($image === null ? "NULL" : $image));
+error_log("Image type: " . gettype($image));
 
 // Kiểm tra category tồn tại
 if ($category_id) {
@@ -136,7 +142,7 @@ if ($category_id) {
 }
 
 try {
-    $result = $this->productModel->updateProduct($id, $name, $description, $price, $category_id);
+    $result = $this->productModel->updateProduct($id, $name, $description, $price, $category_id, $image);
     if ($result) {
         // Lấy dữ liệu sau khi cập nhật để kiểm tra
         $updatedProduct = $this->productModel->getProductByIdForApi($id);

@@ -135,6 +135,23 @@
     .service-item {
         color: #505050;
     }
+    
+    .no-image-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f0f0f0;
+        color: #aaa;
+        font-size: 18px;
+        font-weight: 500;
+        border-radius: 8px;
+    }
+    
+    .main-image-container.no-image {
+        background-color: #f8f9fa;
+    }
 </style>
 
 <script>
@@ -167,12 +184,11 @@ document.addEventListener('DOMContentLoaded', function() {
                                 ${product.image ? `
                                 <div class="main-image-container">
                                     <img id="main-product-image" src="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/${product.image}" 
-                                        class="img-fluid" alt="${product.name}">
+                                        class="img-fluid" alt="${product.name}" onerror="this.src='/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/public/images/placeholder.jpg'; this.onerror=null;">
                                 </div>
                                 ` : `
-                                <div class="main-image-container">
-                                    <img src="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/public/images/no-image.png" 
-                                        class="img-fluid" alt="Không có ảnh">
+                                <div class="main-image-container no-image">
+                                    <div class="no-image-placeholder">Không có ảnh</div>
                                 </div>
                                 `}
                             </div>

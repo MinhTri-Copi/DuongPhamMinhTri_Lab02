@@ -281,7 +281,7 @@
     
     .product-image-container {
         height: 180px;
-        background-color: #fff;
+        background-color: #f8f9fa;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -295,6 +295,10 @@
         height: 100%;
         object-fit: contain;
         transition: transform 0.3s;
+    }
+    
+    .product-card:hover .product-image {
+        transform: scale(1.05);
     }
     
     .product-badge {
@@ -407,6 +411,18 @@
         background-size: 16px;
         padding-right: 40px;
     }
+    
+    .no-image-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f0f0f0;
+        color: #aaa;
+        font-size: 14px;
+        font-weight: 500;
+    }
 </style>
 
 <!-- JavaScript for animations -->
@@ -450,6 +466,13 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div class="card product-card h-100 shadow-sm" onclick="goToProductDetails(${product.id})">
                             <div class="product-badge">
                                 <span class="badge badge-danger">-10%</span>
+                            </div>
+                            
+                            <div class="product-image-container">
+                                ${product.image ? 
+                                    `<img src="/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/${product.image}" class="product-image" alt="${product.name}" onerror="this.src='/DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/public/images/placeholder.jpg'; this.onerror=null;">` : 
+                                    `<div class="no-image-placeholder">No Image</div>`
+                                }
                             </div>
                             
                             <div class="card-body p-2">

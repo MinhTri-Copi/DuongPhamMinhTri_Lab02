@@ -88,24 +88,39 @@ public function update()
         exit;
     }
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-$id = $_POST['id'];
-$name = $_POST['name'];
-$description = $_POST['description'];
-$price = $_POST['price'];
-$category_id = $_POST['category_id'];
-if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
-$image = $this->uploadImage($_FILES['image']);
-} else {
-$image = $_POST['existing_image'];
-}
-$edit = $this->productModel->updateProduct($id, $name, $description,
-$price, $category_id, $image);
-if ($edit) {
-header('Location: /DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product');
-} else {
-echo "Đã xảy ra lỗi khi lưu sản phẩm.";
-}
-}
+        $id = $_POST['id'];
+        $name = $_POST['name'];
+        $description = $_POST['description'];
+        $price = $_POST['price'];
+        $category_id = $_POST['category_id'];
+        
+        // Xử lý hình ảnh
+        if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
+            $image = $this->uploadImage($_FILES['image']);
+            error_log("New image uploaded: $image");
+        } else if (isset($_POST['existing_image']) && !empty($_POST['existing_image'])) {
+            $image = $_POST['existing_image'];
+            error_log("Using existing image: $image");
+        } else {
+            // Nếu không có image mới và không có existing_image, đặt thành null
+            $image = null;
+            error_log("Setting image to NULL");
+        }
+        
+        error_log("Updating product ID: $id");
+        error_log("Name: $name");
+        error_log("Description: $description");
+        error_log("Price: $price");
+        error_log("Category ID: $category_id");
+        error_log("Image: " . ($image === null ? "NULL" : $image));
+        
+        $edit = $this->productModel->updateProduct($id, $name, $description, $price, $category_id, $image);
+        if ($edit) {
+            header('Location: /DuongPhamMinhTri_Lab02/ma_nguon_mo_project_lab2/Product');
+        } else {
+            echo "Đã xảy ra lỗi khi lưu sản phẩm.";
+        }
+    }
 }
 public function delete($id)
 {

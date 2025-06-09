@@ -29,7 +29,7 @@ public function getProductById($id)
     $result = $stmt->fetch(PDO::FETCH_OBJ);
     return $result;
 }
-public function addProduct($name, $description, $price, $category_id)
+public function addProduct($name, $description, $price, $category_id, $image = null)
 {
 $errors = [];
 if (empty($name)) {
@@ -45,16 +45,20 @@ if (count($errors) > 0) {
 return $errors;
 }
 $query = "INSERT INTO " . $this->table_name . " (name, description, price,
-category_id) VALUES (:name, :description, :price, :category_id)";
+category_id, image) VALUES (:name, :description, :price, :category_id, :image)";
 $stmt = $this->conn->prepare($query);
 $name = htmlspecialchars(strip_tags($name));
 $description = htmlspecialchars(strip_tags($description));
 $price = htmlspecialchars(strip_tags($price));
 $category_id = htmlspecialchars(strip_tags($category_id));
+if ($image) {
+    $image = htmlspecialchars(strip_tags($image));
+}
 $stmt->bindParam(':name', $name);
 $stmt->bindParam(':description', $description);
 $stmt->bindParam(':price', $price);
 $stmt->bindParam(':category_id', $category_id);
+$stmt->bindParam(':image', $image);
 if ($stmt->execute()) {
 return true;
 }
@@ -65,19 +69,13 @@ $id,
 $name,
 $description,
 $price,
-$category_id
+$category_id,
+$image = null
 ) {
     // Bắt đầu transaction
     $this->conn->beginTransaction();
 
     try {
-        // Ghi log các giá trị trước khi cập nhật
-        error_log("ProductModel::updateProduct - ID: $id");
-        error_log("ProductModel::updateProduct - Name: $name");
-        error_log("ProductModel::updateProduct - Description: $description");
-        error_log("ProductModel::updateProduct - Price: $price");
-        error_log("ProductModel::updateProduct - Category ID: $category_id");
-
         // Kiểm tra xem sản phẩm có tồn tại không
         $checkProduct = "SELECT * FROM " . $this->table_name . " WHERE id = :id";
         $stmt = $this->conn->prepare($checkProduct);
@@ -86,12 +84,9 @@ $category_id
         $product = $stmt->fetch(PDO::FETCH_ASSOC);
         
         if (!$product) {
-            error_log("ProductModel::updateProduct - Product ID $id not found");
             $this->conn->rollBack();
             return false;
         }
-        
-        error_log("ProductModel::updateProduct - Existing product: " . print_r($product, true));
 
         // Kiểm tra category_id
         if ($category_id !== null) {
@@ -101,7 +96,6 @@ $category_id
             $stmt->execute();
             
             if (!$stmt->fetch()) {
-                error_log("ProductModel::updateProduct - Category ID $category_id not found");
                 $this->conn->rollBack();
                 return false;
             }
@@ -131,16 +125,24 @@ $category_id
             $bindParams[':category_id'] = $category_id;
         }
         
+        // Xử lý trường hợp image
+        if ($image !== null) {
+            // Có hình ảnh
+            $updateFields[] = "image = :image";
+            $bindParams[':image'] = htmlspecialchars(strip_tags($image));
+        } else if ($image === null) {
+            // Nếu image được gửi là null, đặt cột image thành NULL trong database
+            $updateFields[] = "image = NULL";
+        }
+        
         // Nếu không có trường nào cần cập nhật
         if (empty($updateFields)) {
-            error_log("ProductModel::updateProduct - No fields to update");
             $this->conn->commit();
             return true;
         }
         
         // Tạo câu query cập nhật
         $query = "UPDATE " . $this->table_name . " SET " . implode(", ", $updateFields) . " WHERE id = :id";
-        error_log("ProductModel::updateProduct - Update query: $query");
         
         $stmt = $this->conn->prepare($query);
         
@@ -150,32 +152,19 @@ $category_id
         // Bind các tham số khác
         foreach ($bindParams as $param => $value) {
             $stmt->bindValue($param, $value);
-            error_log("ProductModel::updateProduct - Binding $param: $value");
         }
         
         $result = $stmt->execute();
-        error_log("ProductModel::updateProduct - Execute result: " . ($result ? 'true' : 'false'));
         
         if ($result) {
             $this->conn->commit();
-            
-            // Kiểm tra lại dữ liệu sau khi cập nhật
-            $checkUpdated = "SELECT * FROM " . $this->table_name . " WHERE id = :id";
-            $stmt = $this->conn->prepare($checkUpdated);
-            $stmt->bindParam(':id', $id);
-            $stmt->execute();
-            $updatedProduct = $stmt->fetch(PDO::FETCH_ASSOC);
-            error_log("ProductModel::updateProduct - Updated product: " . print_r($updatedProduct, true));
-            
             return true;
         } else {
             $this->conn->rollBack();
-            error_log("ProductModel::updateProduct - Update failed");
             return false;
         }
     } catch (PDOException $e) {
         $this->conn->rollBack();
-        error_log("ProductModel::updateProduct - PDO Error: " . $e->getMessage());
         throw $e;
     }
 }
