@@ -168,14 +168,38 @@ try {
 // Xóa sản phẩm theo ID
 public function destroy($id)
 {
-header('Content-Type: application/json');
-$result = $this->productModel->deleteProduct($id);
-if ($result) {
-echo json_encode(['message' => 'Product deleted successfully']);
-} else {
-http_response_code(400);
-echo json_encode(['message' => 'Product deletion failed']);
-}
+    header('Content-Type: application/json');
+    
+    if (!$id) {
+        http_response_code(400);
+        echo json_encode(['message' => 'Product ID is required for delete']);
+        return;
+    }
+    
+    // Kiểm tra sản phẩm tồn tại trước khi xóa
+    $product = $this->productModel->getProductByIdForApi($id);
+    if (!$product) {
+        http_response_code(404);
+        echo json_encode(['message' => 'Product not found']);
+        return;
+    }
+    
+    try {
+        $result = $this->productModel->deleteProduct($id);
+        if ($result) {
+            echo json_encode(['message' => 'Product deleted successfully']);
+        } else {
+            http_response_code(400);
+            echo json_encode(['message' => 'Product deletion failed']);
+        }
+    } catch (PDOException $e) {
+        error_log("PDO Error: " . $e->getMessage());
+        http_response_code(500);
+        echo json_encode([
+            'message' => 'Database error occurred',
+            'error' => $e->getMessage()
+        ]);
+    }
 }
 }
 ?>
